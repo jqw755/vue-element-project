@@ -1,0 +1,15 @@
+.el-table {
+  td{
+    padding: 6px 0;
+  }
+
+  .el-table__header-wrapper, .el-table__fixed-right {
+    .el-table__header {
+      thead th {
+        padding: 10px 0;
+        background: #f4f4f4;
+      }
+    }
+  }
+
+}

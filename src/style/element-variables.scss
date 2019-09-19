@@ -1,0 +1,11 @@
+/* 换肤 */
+/* 改变主题色变量，主色调；成功色；警告色；危险色 */
+$--color-primary: #4dbd73;
+$--color-success: #7ebf41;
+$--color-warning: #ffb60a;
+$--color-danger: #f06a3a;
+
+/* 改变 icon 字体路径变量，必需 */
+$--font-path: '~element-ui/lib/theme-chalk/fonts';
+
+@import "~element-ui/packages/theme-chalk/src/index";
