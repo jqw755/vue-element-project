@@ -2,15 +2,25 @@
   <el-container class="home-container">
     <!--页头-->
     <el-header class="global-header ">
-      <div class="f-left">欢迎</div>
+      <div class="f-left">欢迎您</div>
       <div class="login-out f-right" @click="logout">
         退出登录
       </div>
     </el-header>
 
-    <el-container class="home-container-wrap">
+    <el-container>
+      <!--菜单-->
+      <el-aside width="200px" class="menu-aside">
+        <el-menu class="home-menu" :unique-opened="true" :default-active="currentPage" @select="menuSelect">
+          <el-menu-item index="/index">
+            <i class="el-icon-menu"></i>
+            <span slot="title">列表管理</span>
+          </el-menu-item>
+        </el-menu>
+      </el-aside>
+
       <!--子页面显示的内容区-->
-      <el-main :class="['home-content']">
+      <el-main class="home-content-wrap">
         <keep-alive>
           <router-view v-if="$route.meta.keepAlive"></router-view>
         </keep-alive>
@@ -21,6 +31,7 @@
         </div>
       </el-main>
     </el-container>
+
   </el-container>
 </template>
 
@@ -30,6 +41,8 @@
   export default {
     data() {
       return {
+        currentPage: auth.getCurrentPage(),
+
         isShowTop: false, // 显示返回顶部按钮
 
         // 公司信息
@@ -63,6 +76,11 @@
         }
       },
 
+      // 选中菜单
+      menuSelect(path){
+        this.$router.push({path});
+      },
+
       //  退出登录
       logout() {
         this.$confirm('确定退出登录吗?', '退出登录', {
@@ -73,7 +91,8 @@
           // 前端退出
           auth.removeToken();
           this.$router.push('/login');
-        }).catch(() => {});
+        }).catch(() => {
+        });
       },
     },
     computed: {},
@@ -93,41 +112,44 @@
       padding: 0 30px;
       background: $global-header-bg;
       z-index: 2001;
-      position: fixed;
       letter-spacing: 0;
-      top: 0;
-      left: 0;
-      .login-out{
+      .login-out {
         cursor: pointer;
       }
     }
-    .home-container-wrap {
-      height: 100%;
-      position: relative;
-      .home-content {
-        min-height: 100%;
-        color: $base-font;
-        position: relative;
-        padding-top: 80px;
-        .to-top {
-          width: 42px;
-          height: 42px;
-          color: #7ebf41;
-          border-radius: 50%;
-          cursor: pointer;
-          transition: .3s;
-          box-shadow: 0 0 6px rgba(0, 0, 0, .3);
-          z-index: 9999;
-          background: #fff;
-          position: fixed;
-          right: 30px;
-          bottom: 40px;
 
-        }
+    .menu-aside {
+      min-height: 100%;
+      box-shadow: -2px 0 10px 2px rgba(0, 0, 0, .2);
+      .home-menu {
+        height: 100%;
+        background: $base-f7;
       }
     }
+
+    .home-content-wrap {
+      min-height: 100%;
+      color: $base-font;
+      position: relative;
+      padding-left: 20px;
+      .to-top {
+        width: 42px;
+        height: 42px;
+        color: #7ebf41;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: .3s;
+        box-shadow: 0 0 6px rgba(0, 0, 0, .3);
+        z-index: 9999;
+        background: #fff;
+        position: fixed;
+        right: 30px;
+        bottom: 40px;
+
+      }
+
+    }
+
   }
 </style>
-<style lang="scss">
 
-</style>

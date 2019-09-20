@@ -1,5 +1,24 @@
 <template>
   <div class="index-container">
+    <!--表格筛选-->
+    <section class="table-filter-wrap">
+      <!--表格顶部一级搜索-->
+      <div class="flex justify-between first-filter">
+        <el-form :model="tableFilterObj" :inline="true" class="form-inline" size="mini" ref="tableFilterObj">
+
+          <el-form-item label="设备Id" class="" prop="deviceId">
+            <el-input placeholder="输入设备Id" v-model="tableFilterObj.deviceId"></el-input>
+          </el-form-item>
+
+          <el-form-item>
+            <el-button type="primary" class="" @click="">查询</el-button>
+            <el-button type="info" class=" " @click="resetFilterForm">重置</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+    </section>
+
+    <!--数据表格-->
     <el-table :data="tableData" border>
 
       <el-table-column v-for="(item,index) in tableCols" :key="index" :prop="item.prop" :label="item.label"
@@ -35,8 +54,14 @@
   export default {
     data() {
       return {
+        tableFilterObj: {
+          deviceId: '',
+        },
         tableData: [
           {
+            deviceId: '1002564',
+            deviceName: 'device007',
+            deviceStatusDesc: '离线',
             date: '2016-05-02',
             name: '王小虎',
             province: '上海',
@@ -45,6 +70,9 @@
             status: 0
           },
           {
+            deviceId: '1002565',
+            deviceName: 'device008',
+            deviceStatusDesc: '在线',
             date: '2016-05-02',
             name: '王小虎',
             province: '上海',
@@ -54,6 +82,18 @@
           }],
         tableCols: [
           {
+            prop: 'deviceId',
+            label: '设备Id',
+            minWidth: '120'
+          }, {
+            prop: 'deviceName',
+            label: '设备名称',
+            minWidth: '130'
+          }, {
+            prop: 'deviceStatusDesc',
+            label: '设备状态',
+            minWidth: '100'
+          }, {
             prop: 'date',
             label: '日期',
             minWidth: '150'
@@ -76,6 +116,14 @@
       };
     },
     methods: {
+      // 重置筛选表单
+      resetFilterForm() {
+        this.$refs.tableFilterObj.resetFields();
+        // this.pageObj.currentPage = 1;
+        // this.pageObj.pageSize = 10;
+        // this.getList();
+      },
+
       changeStatus(row) {
         row.status = row.status === 1 ? 0 : 1;
       },
@@ -89,6 +137,6 @@
 
 <style scoped lang="scss">
   .index-container {
-
   }
 </style>
+

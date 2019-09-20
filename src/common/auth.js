@@ -13,7 +13,8 @@ const auth = {
   },
   //判断是否登录
   isLogin: () => {
-    return !!localStorage.getItem(IS_LOGIN) && !!auth.getToken();
+     return !!localStorage.getItem(IS_LOGIN);
+    // return !!localStorage.getItem(IS_LOGIN) && !!auth.getToken();
   },
   //设置token
   setToken: token => {
