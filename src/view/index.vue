@@ -40,6 +40,9 @@
     <!--详情dialog-->
     <el-dialog title="详情" :visible.sync="detailDialogVisible" width="50%">
       <el-form :model="detailObj" label-width="80px">
+        <el-form-item label="设备Id">{{detailObj.deviceId}}</el-form-item>
+        <el-form-item label="设备名称">{{detailObj.deviceName}}</el-form-item>
+        <el-form-item label="设备状态">{{detailObj.deviceStatusDesc}}</el-form-item>
         <el-form-item label="日期">{{detailObj.date}}</el-form-item>
         <el-form-item label="姓名">{{detailObj.name}}</el-form-item>
         <el-form-item label="省份">{{detailObj.province}}</el-form-item>
