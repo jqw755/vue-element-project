@@ -8,8 +8,8 @@ axios.defaults.baseURL = config.getConfig().baseUrl;
 axios.defaults.timeout = 60000;
 // console.log( process.env.API_ROOT)
 
-axios.defaults.headers.post['Content-Type'] = 'application/json; charset=UTF-8;';
-axios.defaults.headers.post['Accept-Language'] = 'zh-cn,zh;';
+// axios.defaults.headers.post['Content-Type'] = 'application/json; charset=UTF-8;';
+// axios.defaults.headers.post['Accept-Language'] = 'zh-cn,zh;';
 
 //请求拦截
 axios.interceptors.request.use(config => {

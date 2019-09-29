@@ -164,6 +164,7 @@
         this.$api.post('/setState', params).then(res => {
           if (res) {
             row.state = row.state === 1 ? 0 : 1;
+            this.$message.success('操作成功')
           }
         }).catch(e => {
           console.log(e)
@@ -199,7 +200,7 @@
           page: this.pageObj.currentPage,
           pageSize: this.pageObj.pageSize,
         };
-        this.$api.post('/getList', params).then(res => {
+        this.$api.get('/getList', params).then(res => {
           if (res && res.list) {
             this.tableData = res.list;
             this.pageObj.total = res.total;
