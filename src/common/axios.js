@@ -47,7 +47,11 @@ axios.interceptors.response.use(response => {
     return
   }
   if (error.message.indexOf('404') !== -1) {
-    Vue.prototype.$message.error('请求资源未找到，请稍后再试');
+    Vue.prototype.$message.error('404，请求资源未找到，请稍后再试');
+    return
+  }
+  if (error.message.indexOf('500') !== -1) {
+    Vue.prototype.$message.error('500，服务端错误');
     return
   }
   Vue.prototype.$message.error('请求出错');
