@@ -1,7 +1,8 @@
 const config = {
   active: 'dev',
   dev: {
-    baseUrl: '',
+   baseUrl: 'http://192.168.1.127:8088',
+  //    baseUrl: 'http://localhost:8089/api',
     serverUrl: '/',
   },
   test: {

@@ -2,6 +2,7 @@ import Vue from 'vue'
 import axios from 'axios'
 // 导入API URL
 import config from "./config";
+import auth from "./auth";
 
 axios.defaults.baseURL = config.getConfig().baseUrl;
 axios.defaults.timeout = 60000;
@@ -9,10 +10,16 @@ axios.defaults.timeout = 60000;
 
 axios.defaults.headers.post['Content-Type'] = 'application/json; charset=UTF-8;';
 axios.defaults.headers.post['Accept-Language'] = 'zh-cn,zh;';
-axios.defaults.timeout = 60000;
 
 //请求拦截
 axios.interceptors.request.use(config => {
+  // 设置系统级的统一参数
+  let accessToken = auth.getToken();
+  // 系统级参数
+  config.data = {
+    token: accessToken || '',
+    ...config.data
+  };
   return config;
 }, error => {
   // console.log('请求出错,测试下面的return promise.reject0');
@@ -30,9 +37,9 @@ axios.interceptors.response.use(response => {
   }
   // 请求失败 code != 0
   else {
-      response.data.message = response.data.msg;
-      Vue.prototype.$message.error(response.data.msg);
-      return Promise.reject(response.data);
+    response.data.message = response.data.msg;
+    Vue.prototype.$message.error(response.data.msg);
+    return Promise.reject(response.data);
   }
 }, error => {
   if (error.message.indexOf('timeout') !== -1) {
