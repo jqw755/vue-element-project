@@ -9,6 +9,8 @@ import './style/element-variables.scss'
 // 覆盖element-ui的css文件
 import './style/replace-element.scss'
 
+// 国际化
+import i18n from './i18n/i18n';
 
 import router from './router'
 
@@ -20,8 +22,12 @@ import axios from './common/axios'
 // global css
 import './style/base.scss'
 
-Vue.prototype.$api = axios;
+import PowershareUI from 'powershare-ui' // 引入组件库
+import 'powershare-ui/dist/powershare-ui.css' // 引入样式库
 
+Vue.use(PowershareUI)
+
+Vue.prototype.$api = axios;
 
 Vue.config.productionTip = false;
 
@@ -30,6 +36,7 @@ new Vue({
   el: '#app',
   router,
   store,
+  i18n,
   components: {App},
   template: '<App/>'
 });

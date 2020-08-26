@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import auth from '../common/auth'
+import $store from '../store/index'
 
 Vue.use(Router);
 
@@ -95,11 +96,23 @@ router.beforeEach((to, from, next) => {
 });
 // 进入路由后执行
 router.afterEach((to, from, next) => {
+  // 将to页面的路由父子信息存进本地做面包屑导航，再通知store从本地取出来，因为客户端存数据不是双向绑定的，只能通过store取
+  // 且又要避免刷新页面，丢失上一级页面路由信息，还需要进行path对比
+  // if (to.path !== auth.getCurrentPage()) {
+  //   auth.setBreadcrumb({
+  //     'to': { meta: to.meta, path: to.path },
+  //     'from': { path: from.path }
+  //   });
+  // }
+  // $store.dispatch('setBreadcrumb', true);
+
   // 将该页面路由存本地，对应home.vue的菜单，实现菜单默认选中状态
   auth.setCurrentPage(to.path);
 
 });
 
+// Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
+//  !!! 作用是：重置之前addRoutes过的路由，避免多次add出现重复 !!!
 export function resetRouter() {
   const newRouter = createRouter();
   router.matcher = newRouter.matcher // reset router

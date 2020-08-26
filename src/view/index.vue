@@ -6,8 +6,8 @@
       <div class="flex justify-between first-filter">
         <el-form :model="tableFilterObj" :inline="true" class="form-inline" size="mini" ref="tableFilterObj">
 
-          <el-form-item label="设备Id" class="" prop="deviceId">
-            <el-input placeholder="输入设备Id" v-model="tableFilterObj.deviceId"></el-input>
+          <el-form-item label="设备Id" class="" prop="id">
+            <el-input placeholder="输入设备Id" v-model="tableFilterObj.id"></el-input>
           </el-form-item>
 
           <el-form-item>
@@ -26,7 +26,7 @@
 
       <el-table-column prop="state" label="状态" width="120" align="center">
         <template slot-scope="scope">
-          <el-switch :value="scope.row.state===1" @change="changeStatus(scope.row)"></el-switch>
+          <el-switch :value="scope.row.state==='开'" @change="changeStatus(scope.row)"></el-switch>
         </template>
       </el-table-column>
 
@@ -43,12 +43,15 @@
     </section>
 
     <!--详情dialog-->
-    <el-dialog title="详情" :visible.sync="detailDialogVisible" width="50%">
-      <el-form :model="detailObj" label-width="80px" v-loading="loadingDetail">
-        <el-form-item label="设备Id">{{detailObj.id}}</el-form-item>
-        <el-form-item label="设备sn">{{detailObj.sn}}</el-form-item>
-        <el-form-item label="设备名称">{{detailObj.addr}}</el-form-item>
-        <el-form-item label="设备状态">{{detailObj.state}}</el-form-item>
+    <el-dialog title="详情" :visible.sync="detailDialogVisible" width="50%" :close-on-click-modal="false">
+      <el-form :model="detailObj" label-width="120px" v-loading="loadingDetail">
+        <el-form-item label="设备Id：">{{detailObj.id||'--'}}</el-form-item>
+        <el-form-item label="设备sn：">{{detailObj.sn||'--'}}</el-form-item>
+        <el-form-item label="设备ip：">{{detailObj.ip||'--'}}</el-form-item>
+        <el-form-item label="设备名称：">{{detailObj.addr||'--'}}</el-form-item>
+        <el-form-item label="在线状态：">{{detailObj.isonline||'--'}}</el-form-item>
+        <el-form-item label="开关状态：">{{detailObj.state||'--'}}</el-form-item>
+        <el-form-item label="详细：">{{detailObj.detailed||'--'}}</el-form-item>
       </el-form>
     </el-dialog>
   </div>
@@ -64,32 +67,9 @@
         loadingTable: false,
 
         tableFilterObj: {
-          deviceId: '',
+          id: '',
         },
-        tableData: [
-          {
-            id: '1002566',
-            sn: '456456',
-            deviceStatusDesc: '离线',
-            date: '2016-05-02',
-            name: '王小虎',
-            province: '上海',
-            city: '普陀区',
-            address: '上海市普陀区金沙江路 1518 弄',
-            state: 0
-          },
-          {
-            id: '1002565',
-            sn: '123123',
-            deviceName: 'device008',
-            deviceStatusDesc: '在线',
-            date: '2016-05-02',
-            name: '王小虎',
-            province: '上海',
-            city: '普陀区',
-            address: '上海市普陀区金沙江路 1518 弄',
-            state: 1
-          }],
+        tableData: [],
         tableCols: [
           {
             prop: 'id',
@@ -98,30 +78,41 @@
           },   {
             prop: 'sn',
             label: 'sn',
-            minWidth: '120'
-          }, {
-            prop: 'deviceName',
-            label: '设备名称',
-            minWidth: '130'
-          }, {
-            prop: 'deviceStatusDesc',
-            label: '设备状态',
-            minWidth: '100'
-          }, {
-            prop: 'date',
-            label: '日期',
             minWidth: '150'
           }, {
-            prop: 'name',
-            label: '姓名',
-            minWidth: '120'
+            prop: 'addr',
+            label: '设备名称',
+            minWidth: '150'
           }, {
-            prop: 'province',
-            label: '省份',
-            minWidth: '120'
+            prop: 'isonline',
+            label: '在线状态',
+            minWidth: '100'
           }, {
-            prop: 'address',
-            label: '地址',
+            prop: 'ip',
+            label: 'ip',
+            minWidth: '160'
+          },  {
+            prop: 'detailed',
+            label: '详细',
+            minWidth: '160'
+          },{
+            prop: 'type',
+            label: 'type',
+            minWidth: '160'
+          },
+          {
+            prop: 'blue',
+            label: 'blue',
+            minWidth: '120'
+          },
+          {
+            prop: 'green',
+            label: 'green',
+            minWidth: '120'
+          },
+          {
+            prop: 'red',
+            label: 'red',
             minWidth: '120'
           },
         ],
@@ -157,17 +148,16 @@
         const params = {
           id: row.id,
           sn: row.sn,
-          key: row.key,
+          key: 'power',
           value: row.state === '开' ? 0 : 1,
         };
         this.loadingTable = true;
         this.$api.post('/setState', params).then(res => {
-          if (res) {
-            row.state = row.state === 1 ? 0 : 1;
-            this.$message.success('操作成功')
-          }
+
+          this.$message.success('操作成功');
+          this.getList();
+
         }).catch(e => {
-          console.log(e)
         }).finally(()=>{
           this.loadingTable = false;
         })
@@ -176,6 +166,8 @@
       // 查看详情
       queryDetail(row) {
         this.detailDialogVisible = true;
+        this.detailObj = row;
+        return
 
         const params = {
           id: row.id,
@@ -184,10 +176,9 @@
         this.loadingDetail = true;
         this.$api.post('/listDetail', params).then(res => {
           if (res) {
-            this.detailObj = row;
+
           }
         }).catch(e => {
-          console.log(e)
         }).finally(()=>{
           this.loadingDetail = false;
         })
@@ -196,17 +187,15 @@
         this.loadingTable = true;
         const params = {
           ...this.tableFilterObj,
-          filter1: '',
           page: this.pageObj.currentPage,
-          pageSize: this.pageObj.pageSize,
+          pagesize: this.pageObj.pageSize,
         };
-        this.$api.get('/getList', params).then(res => {
+        this.$api.post('/getList', params).then(res => {
           if (res && res.list) {
             this.tableData = res.list;
             this.pageObj.total = res.total;
           }
         }).catch(e => {
-          console.log(e)
         }).finally(()=>{
           this.loadingTable = false;
         })
@@ -217,7 +206,5 @@
 </script>
 
 <style scoped lang="scss">
-  .index-container {
-  }
 </style>
 

@@ -23,7 +23,10 @@
       </el-form-item>
     </el-form>
 
-    <footer class="text-center">后台系统 ©2019</footer>
+    <footer class="text-center">
+      <ps-badge>123</ps-badge>
+      后台系统 ©2019
+    </footer>
   </div>
 </template>
 
@@ -34,6 +37,7 @@
   export default {
     data() {
       return {
+        max: 99,
         loginForm: {
           account: '',
           pwd: ''
